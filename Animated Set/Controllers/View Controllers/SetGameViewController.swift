@@ -12,9 +12,10 @@ class SetGameViewController: UIViewController {
   
   // MARK: - Outlets
   @IBOutlet weak var gridView: UIView!
-  @IBOutlet weak var dealThreeCardsButton: UIButton!
   @IBOutlet weak var scoreLabel: UILabel!
   @IBOutlet var swipeGestureRecognizer: UISwipeGestureRecognizer!
+  @IBOutlet weak var deckView: UIView!
+  @IBOutlet weak var discardPileView: UIView!
   
   // MARK: - Properties
   private let startingRows = 4
@@ -28,13 +29,28 @@ class SetGameViewController: UIViewController {
       game.delegate = self
     }
   }
+  
   private var deckIsEmpty = false
+  private var deckTopCard: CardView! {
+    didSet {
+      deckTopCard.delegate = self
+    }
+  }
+  
   private var grid: Grid!
   private var tagForCard: [SetCard : Int] = [:]
+  
+  private var safeAreaAsView: UIView {
+    let guide = view.safeAreaLayoutGuide
+    return UIView(frame: guide.layoutFrame)
+  }
   
   // MARK: - View Controller Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    deckTopCard = CardView(frame: deckView.bounds)
+    deckView.addSubview(deckTopCard)
     
     grid = Grid(layout: .dimensions(rowCount: startingRows, columnCount: 3),
                 frame: gridView.bounds)
@@ -62,10 +78,6 @@ class SetGameViewController: UIViewController {
   }
     
   // MARK: - Actions
-  @IBAction func onTapDealThreeCardsButton(_ sender: UIButton) {
-    dealThree()
-  }
-  
   @IBAction func onSwipe(_ sender: UISwipeGestureRecognizer) {
     if !deckIsEmpty {
       dealThree()
@@ -105,13 +117,14 @@ class SetGameViewController: UIViewController {
       if let assocCardView = gridView.viewWithTag(tag) as? CardView {
         cardView = assocCardView
       } else {
-        let newCardView = CardView(frame: dealThreeCardsButton.frame)
+        let newCardView = CardView(frame: deckView.convert(deckView.bounds, to: safeAreaAsView))
         newCardView.card = card
         newCardView.tag = tag
         newCardView.delegate = self
         gridView.addSubview(newCardView)
         cardView = newCardView
       }
+      
       if cardView.frame != newFrame {
         moveCard(cardView, to: newFrame)
       }
@@ -180,7 +193,9 @@ class SetGameViewController: UIViewController {
 
 extension SetGameViewController: CardViewDelegate {
   func onTap(_ cardView: CardView) {
-    if let card = cardView.card {
+    if cardView == deckTopCard {
+      dealThree()
+    } else if let card = cardView.card {
       game.selectCard(card)
     }
   }
@@ -210,7 +225,7 @@ extension SetGameViewController: SetGameDelegate {
   
   func deckGotEmpty() {
     deckIsEmpty = true
-    dealThreeCardsButton.isHidden = true
+    deckView.isHidden = true
   }
   
   func updateScore(with newScore: Int) {
