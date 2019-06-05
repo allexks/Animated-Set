@@ -18,10 +18,21 @@ class CardView: UIView {
   static let distanceBetweenShapes = CGFloat(5.percent) // of the inner rectangle
   static let shapeWidth = CGFloat(25.percent) // of the inner rectangle
   
+  static let faceUpBackgroundColor: UIColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
+  static let faceDownBackgroundColor: UIColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+  static let faceDownStrokeColor: UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+  
   var card: SetCard? {
     didSet {
       setNeedsDisplay()
       setNeedsLayout()
+    }
+  }
+  
+  var isFaceUp = false {
+    didSet {
+      setNeedsLayout()
+      setNeedsDisplay()
     }
   }
   
@@ -49,7 +60,44 @@ class CardView: UIView {
     super.draw(rect)
     
     layer.cornerRadius = bounds.smallerSide / 4
+  
+    if !isFaceUp {
+      drawCardBack()
+    } else {
+      drawCardFront()
+    }
+  }
+  
+  // MARK: - Helpers
+  private func setup() {
+    backgroundColor = CardView.faceUpBackgroundColor
+    layer.borderWidth = 3.0
+    layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+    clipsToBounds = true
     
+    tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapCard))
+    addGestureRecognizer(tapGestureRecognizer)
+  }
+  
+  @objc private func onTapCard() {
+    delegate?.onTap(self)
+  }
+  
+  private func drawCardBack() {
+    let context = UIGraphicsGetCurrentContext()
+    context?.saveGState()
+    
+    let backPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius)
+    backPath.lineWidth = 4.0
+    CardView.faceDownStrokeColor.setStroke()
+    backPath.stroke()
+    CardView.faceDownBackgroundColor.setFill()
+    backPath.fill()
+    
+    context?.restoreGState()
+  }
+  
+  private func drawCardFront() {
     let drawingRectangles = generateDrawingRectangles()
     
     for rectangle in drawingRectangles {
@@ -61,21 +109,6 @@ class CardView: UIView {
         fillPath(path)
       }
     }
-  }
-  
-  // MARK: - Helpers
-  private func setup() {
-    backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
-    layer.borderWidth = 3.0
-    layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
-    clipsToBounds = true
-    
-    tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapCard))
-    addGestureRecognizer(tapGestureRecognizer)
-  }
-  
-  @objc private func onTapCard() {
-    delegate?.onTap(self)
   }
   
   private func generateDrawingRectangles() -> [CGRect] {

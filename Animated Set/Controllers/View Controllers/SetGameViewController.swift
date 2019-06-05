@@ -8,12 +8,13 @@
 
 import UIKit
 
-class SetGameViewController: UIViewController, SetGameDelegate, CardViewDelegate {
+class SetGameViewController: UIViewController {
   
   // MARK: - Outlets
   @IBOutlet weak var gridView: UIView!
   @IBOutlet weak var dealThreeCardsButton: UIButton!
   @IBOutlet weak var scoreLabel: UILabel!
+  @IBOutlet var swipeGestureRecognizer: UISwipeGestureRecognizer!
   
   // MARK: - Properties
   private let startingRows = 4
@@ -53,6 +54,11 @@ class SetGameViewController: UIViewController, SetGameDelegate, CardViewDelegate
   override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
     updateScore(with: game.score)
+    if traitCollection.verticalSizeClass == .compact {
+      swipeGestureRecognizer.direction = .left
+    } else {
+      swipeGestureRecognizer.direction = .up
+    }
   }
     
   // MARK: - Actions
@@ -63,46 +69,6 @@ class SetGameViewController: UIViewController, SetGameDelegate, CardViewDelegate
   @IBAction func onSwipe(_ sender: UISwipeGestureRecognizer) {
     if !deckIsEmpty {
       dealThree()
-    }
-  }
-  
-  // MARK: - Set Game Delegate
-  func updateSelectedCards() {
-    fixOutlinesAndRemovedCards()
-  }
-  
-  func foundSet() {
-    fixOutlinesAndRemovedCards()
-    for card in game.selectedCards {
-      setOutlineColorForCardView(for: card, color: matchedCardOutlineColor)
-    }
-  }
-  
-  func foundMismatch() {
-    fixOutlinesAndRemovedCards()
-    for card in game.selectedCards {
-      setOutlineColorForCardView(for: card,
-                                 color: mismatchedCardOutlineColor)
-    }
-  }
-  
-  func deckGotEmpty() {
-    deckIsEmpty = true
-    dealThreeCardsButton.isHidden = true
-  }
-  
-  func updateScore(with newScore: Int) {
-    scoreLabel.text = traitCollection.verticalSizeClass == .compact ? "Score\n\(newScore)" : "Score: \(newScore)"
-  }
-  
-  func gameOver() {
-    fixOutlinesAndRemovedCards()
-  }
-  
-  // MARK: - Card View Delegate
-  func onTap(_ cardView: CardView) {
-    if let card = cardView.card {
-      game.selectCard(card)
     }
   }
   
@@ -135,14 +101,19 @@ class SetGameViewController: UIViewController, SetGameDelegate, CardViewDelegate
       let newFrame = grid[tag]!.insetBy(dx: distanceBetweenCards/2,
                                         dy: distanceBetweenCards/2)
       
-      if let cardView = gridView.viewWithTag(tag) {
-        cardView.frame = newFrame
+      let cardView: CardView
+      if let assocCardView = gridView.viewWithTag(tag) as? CardView {
+        cardView = assocCardView
       } else {
-        let cardView = CardView(frame: newFrame)
-        cardView.card = card
-        cardView.tag = tag
-        cardView.delegate = self
-        gridView.addSubview(cardView)
+        let newCardView = CardView(frame: dealThreeCardsButton.frame)
+        newCardView.card = card
+        newCardView.tag = tag
+        newCardView.delegate = self
+        gridView.addSubview(newCardView)
+        cardView = newCardView
+      }
+      if cardView.frame != newFrame {
+        moveCard(cardView, to: newFrame)
       }
     }
   }
@@ -151,7 +122,9 @@ class SetGameViewController: UIViewController, SetGameDelegate, CardViewDelegate
     // removed cards
     let removedCards = tagForCard.keys.filter({ !game.availableCards.contains($0) })
     for card in removedCards {
-      gridView.viewWithTag(tagForCard[card]!)?.removeFromSuperview()
+      if let cardView = gridView.viewWithTag(tagForCard[card]!) {
+        cardView.removeFromSuperview()
+      }
       tagForCard[card] = nil
     }
     // outlines
@@ -176,5 +149,75 @@ class SetGameViewController: UIViewController, SetGameDelegate, CardViewDelegate
   
   private func getFirstFreeGridIndex() -> Int {
     return Set(stride(from: 0, to: game.availableCards.count, by: 1)).symmetricDifference(tagForCard.values).min()!
+  }
+  
+  private func moveCard(_ card: CardView, to newFrame: CGRect, completionFaceUp: Bool = true) {
+    UIView.transition(with: card,
+                      duration: 0.3,
+                      options: .curveLinear,
+                      animations: {
+                        card.frame = newFrame
+                      },
+                      completion: { [weak self] _ in
+                        if card.isFaceUp != completionFaceUp {
+                          self?.flipCard(card, faceUp: completionFaceUp)
+                        }
+    })
+  }
+  
+  private func flipCard(_ card: CardView, faceUp: Bool = true) {
+    UIView.transition(with: card,
+                      duration: 0.3,
+                      options: .transitionFlipFromLeft,
+                      animations: {
+                        card.isFaceUp = faceUp
+                      },
+                      completion: nil)
+  }
+}
+
+// MARK: - Card View Delegate
+
+extension SetGameViewController: CardViewDelegate {
+  func onTap(_ cardView: CardView) {
+    if let card = cardView.card {
+      game.selectCard(card)
+    }
+  }
+}
+
+// MARK: - Set Game Delegate
+
+extension SetGameViewController: SetGameDelegate {
+  func updateSelectedCards() {
+    fixOutlinesAndRemovedCards()
+  }
+  
+  func foundSet() {
+    fixOutlinesAndRemovedCards()
+    for card in game.selectedCards {
+      setOutlineColorForCardView(for: card, color: matchedCardOutlineColor)
+    }
+  }
+  
+  func foundMismatch() {
+    fixOutlinesAndRemovedCards()
+    for card in game.selectedCards {
+      setOutlineColorForCardView(for: card,
+                                 color: mismatchedCardOutlineColor)
+    }
+  }
+  
+  func deckGotEmpty() {
+    deckIsEmpty = true
+    dealThreeCardsButton.isHidden = true
+  }
+  
+  func updateScore(with newScore: Int) {
+    scoreLabel.text = traitCollection.verticalSizeClass == .compact ? "Score\n\(newScore)" : "Score: \(newScore)"
+  }
+  
+  func gameOver() {
+    fixOutlinesAndRemovedCards()
   }
 }
