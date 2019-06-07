@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A83716A22A91CA5004AA74F /* Int+arc4random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A83716922A91CA5004AA74F /* Int+arc4random.swift */; };
+		1A83716C22A93FC6004AA74F /* CGRect+randomPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A83716B22A93FC6004AA74F /* CGRect+randomPoint.swift */; };
 		1AC9989F22A7C481009D5713 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC9989E22A7C481009D5713 /* AppDelegate.swift */; };
 		1AC998A622A7C482009D5713 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC998A522A7C482009D5713 /* Assets.xcassets */; };
 		1AC998A922A7C482009D5713 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AC998A722A7C482009D5713 /* LaunchScreen.storyboard */; };
@@ -40,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A83716922A91CA5004AA74F /* Int+arc4random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+arc4random.swift"; sourceTree = "<group>"; };
+		1A83716B22A93FC6004AA74F /* CGRect+randomPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+randomPoint.swift"; sourceTree = "<group>"; };
 		1AC9989B22A7C481009D5713 /* Animated Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Animated Set.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AC9989E22A7C481009D5713 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1AC998A522A7C482009D5713 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -178,6 +182,8 @@
 			children = (
 				1AC998D022A7C5BE009D5713 /* Double+percent.swift */,
 				1AC998D122A7C5BE009D5713 /* Int+repetitionsOf.swift */,
+				1A83716922A91CA5004AA74F /* Int+arc4random.swift */,
+				1A83716B22A93FC6004AA74F /* CGRect+randomPoint.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -306,7 +312,9 @@
 				1AC998E322A7C9BD009D5713 /* ConcentrationGameViewController.swift in Sources */,
 				1AC998C722A7C54A009D5713 /* SetDeck.swift in Sources */,
 				1AC998D222A7C5BE009D5713 /* Double+percent.swift in Sources */,
+				1A83716C22A93FC6004AA74F /* CGRect+randomPoint.swift in Sources */,
 				1AC998E122A7C9A5009D5713 /* ConcentrationGameDelegate.swift in Sources */,
+				1A83716A22A91CA5004AA74F /* Int+arc4random.swift in Sources */,
 				1AC998CD22A7C589009D5713 /* SetGameDelegate.swift in Sources */,
 				1AC998DD22A7C975009D5713 /* ConcentrationCard.swift in Sources */,
 				1AC998D322A7C5BE009D5713 /* Int+repetitionsOf.swift in Sources */,

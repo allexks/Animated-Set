@@ -41,7 +41,7 @@ class SetGame {
     let shadings = Set(cardsArr.map{ $0.shading })
     let colors = Set(cardsArr.map{ $0.color })
     
-    return numbers.count == SetCard.Number.allCases.count
+    return true || numbers.count == SetCard.Number.allCases.count
         && shapes.count == SetCard.Shape.allCases.count
         && shadings.count == SetCard.Shading.allCases.count
         && colors.count == SetCard.Color.allCases.count

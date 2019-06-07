@@ -19,50 +19,39 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view tag="84" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="haR-Xm-6Kt" userLabel="Grid">
-                                <rect key="frame" x="0.0" y="44" width="375" height="659"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="654.66666666666663"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="HAZ-fD-jZu">
-                                <rect key="frame" x="16" y="703" width="345" height="60"/>
+                                <rect key="frame" x="10" y="698.66666666666663" width="355" height="69.333333333333371"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TkK-dV-fU8">
-                                        <rect key="frame" x="0.0" y="0.0" width="107" height="60"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="110.33333333333333" height="69.333333333333329"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="120" id="5K0-Ga-6Gt"/>
-                                        </constraints>
-                                        <variation key="heightClass=compact">
-                                            <mask key="constraints">
-                                                <exclude reference="5K0-Ga-6Gt"/>
-                                            </mask>
-                                        </variation>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" tag="83" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZiR-Xe-91x">
-                                        <rect key="frame" x="119" y="0.0" width="107" height="60"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" tag="83" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZiR-Xe-91x">
+                                        <rect key="frame" x="122.33333333333334" y="0.0" width="110.33333333333334" height="69.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9vT-l2-NfH">
-                                        <rect key="frame" x="238" y="0.0" width="107" height="60"/>
+                                        <rect key="frame" x="244.66666666666666" y="0.0" width="110.33333333333334" height="69.333333333333329"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="TkK-dV-fU8" firstAttribute="width" secondItem="9vT-l2-NfH" secondAttribute="width" id="JEs-pu-7Sc"/>
-                                    <constraint firstAttribute="height" constant="60" id="b9a-PN-Qif"/>
-                                    <constraint firstItem="TkK-dV-fU8" firstAttribute="height" secondItem="9vT-l2-NfH" secondAttribute="height" id="plJ-3N-TQa"/>
+                                    <constraint firstItem="ZiR-Xe-91x" firstAttribute="centerY" secondItem="HAZ-fD-jZu" secondAttribute="centerY" id="AuI-I5-9DY"/>
+                                    <constraint firstItem="ZiR-Xe-91x" firstAttribute="centerX" secondItem="HAZ-fD-jZu" secondAttribute="centerX" id="Ht4-0z-q4J"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="plJ-3N-TQa"/>
+                                        <exclude reference="AuI-I5-9DY"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact" axis="vertical" spacing="79">
                                     <mask key="constraints">
-                                        <exclude reference="b9a-PN-Qif"/>
-                                        <exclude reference="JEs-pu-7Sc"/>
-                                        <include reference="plJ-3N-TQa"/>
+                                        <include reference="AuI-I5-9DY"/>
                                     </mask>
                                 </variation>
                             </stackView>
@@ -71,16 +60,16 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="haR-Xm-6Kt" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ckm-Hp-Swx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HAZ-fD-jZu" secondAttribute="trailing" constant="14" id="E7O-ie-Tnu"/>
-                            <constraint firstItem="HAZ-fD-jZu" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-15" id="FlB-UW-0cA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HAZ-fD-jZu" secondAttribute="trailing" constant="10" id="E7O-ie-Tnu"/>
+                            <constraint firstItem="HAZ-fD-jZu" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-10" id="FlB-UW-0cA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="haR-Xm-6Kt" secondAttribute="bottom" id="Hl0-db-io0"/>
                             <constraint firstItem="haR-Xm-6Kt" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="TxK-gx-LgR"/>
                             <constraint firstItem="HAZ-fD-jZu" firstAttribute="leading" secondItem="haR-Xm-6Kt" secondAttribute="trailing" id="kX7-vb-XE4"/>
-                            <constraint firstItem="HAZ-fD-jZu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="mix-vf-66C"/>
+                            <constraint firstItem="HAZ-fD-jZu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="mix-vf-66C"/>
                             <constraint firstItem="HAZ-fD-jZu" firstAttribute="top" secondItem="haR-Xm-6Kt" secondAttribute="bottom" id="oTI-sW-eRL"/>
                             <constraint firstItem="haR-Xm-6Kt" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="oWQ-Ij-bmW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="HAZ-fD-jZu" secondAttribute="bottom" constant="1" id="w72-RT-iLr"/>
-                            <constraint firstItem="HAZ-fD-jZu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="15" id="wtP-BB-8oW"/>
+                            <constraint firstItem="HAZ-fD-jZu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="wtP-BB-8oW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <variation key="default">
