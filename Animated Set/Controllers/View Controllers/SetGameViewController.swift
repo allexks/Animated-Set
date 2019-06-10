@@ -285,7 +285,7 @@ extension SetGameViewController: SetGameDelegate {
   }
   
   func updateScore(with newScore: Int) {
-    scoreLabel.text = "Score\n\(newScore)" 
+    scoreLabel.text = "Score:\n\(newScore)"
   }
   
   func gameOver() {

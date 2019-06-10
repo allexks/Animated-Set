@@ -81,24 +81,29 @@ extension Themes {
     }
     
     var title: String {
-      switch self {
-      case .faces:
-        return "Faces"
-      case .japanEasy:
-        return "Japan (Easy)"
-      case .japanMedium:
-        return "Japan (Medium)"
-      case .japanHard:
-        return "Japan (Hard)"
-      case .flags:
-        return "Flags"
-      }
+      return Theme.titles[self] ?? ""
     }
     
     func getRandomEmojis(emojisCount: Int) -> String {
       guard emojisCount > 0 && emojisCount <= emojiString.count else { return "" }
       let result = emojiString.map{ String($0) }.shuffled() [..<emojisCount]
       return result.joined()
+    }
+    
+    private static let titles: [Theme: String] = [
+      .faces : "Faces",
+      .japanEasy: "Japan (Easy)",
+      .japanMedium: "Japan (Medium)",
+      .japanHard: "Japan (Hard)",
+      .flags: "Flags"
+    ]
+    
+    init?(from title: String) {
+      if let theme = Theme.titles.keys.first(where: { Theme.titles[$0] == title }) {
+        self = theme
+      } else {
+        return nil
+      }
     }
   }
 }

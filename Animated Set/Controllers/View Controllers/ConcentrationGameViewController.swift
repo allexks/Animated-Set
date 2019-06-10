@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConcentrationGameViewController: UIViewController, ConcentrationGameDelegate {
+class ConcentrationGameViewController: UIViewController {
   
   // MARK: - Outlets
   @IBOutlet weak var scoreLabel: UILabel!
@@ -26,6 +26,7 @@ class ConcentrationGameViewController: UIViewController, ConcentrationGameDelega
   
   lazy var themes = Themes.shared
   var theme: Themes.Theme!
+  
   var emojisMapper: [ConcentrationCard.IDType: String] = [:]
 
   var game: ConcentrationGame! {
@@ -45,7 +46,12 @@ class ConcentrationGameViewController: UIViewController, ConcentrationGameDelega
   // MARK: - ViewController Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
-    loadNewGame(hasNewTheme: true, withTheme: nil)
+    loadNewGame(hasNewTheme: true, withTheme: theme)
+  }
+  
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    updateScore(newScore: game.score)
   }
   
   // MARK: - Actions
@@ -58,42 +64,21 @@ class ConcentrationGameViewController: UIViewController, ConcentrationGameDelega
   @IBAction func onTapNewGameButton(_ sender: UIBarButtonItem) {
     loadNewGame()
   }
-  @IBAction func onTapNewThemeButton(_ sender: Any) {
-    loadNewTheme(nil)
-    reloadViews()
-  }
-  
-  // MARK: - Concentration Game Delegate
-  func updateScore(newScore: Int) {
-    scoreLabel.text = "Score: \(newScore)"
-  }
-  
-  func registerMatch(firstIndex: Int, secondIndex: Int) {
-    removeCard(firstIndex)
-    removeCard(secondIndex)
-  }
-  
-  func registerMismatch(firstIndex: Int, secondIndex: Int) {
-    DispatchQueue.main.asyncAfter(deadline: .now() + cardFlipDelayInSeconds) {
-      [weak self] in
-      guard let self = self else { return }
-      self.flipFaceDown(firstIndex)
-      self.flipFaceDown(secondIndex)
-    }
-  }
   
   // MARK: - Helper methods
   private func loadNewGame(hasNewTheme: Bool = false, withTheme: Themes.Theme? = nil) {
     game = ConcentrationGame(pairsCount: numberOfPairs)
     if hasNewTheme {
       loadNewTheme(withTheme)
+    } else {
+      reloadViews()
     }
-    reloadViews()
   }
   
-  private func loadNewTheme(_ newTheme: Themes.Theme?) {
+  func loadNewTheme(_ newTheme: Themes.Theme?) {
     /// name is nil for a random theme
     theme = newTheme ?? themes.selectRandomTheme()
+    reloadViews()
   }
   
   private func reloadViews() {
@@ -156,5 +141,35 @@ class ConcentrationGameViewController: UIViewController, ConcentrationGameDelega
                     self.cardButtons[index].alpha = 0
                    },
                    completion: nil)
+  }
+}
+
+// MARK: - Concentration Game Delegate
+
+extension ConcentrationGameViewController: ConcentrationGameDelegate {
+  func updateScore(newScore: Int) {
+    scoreLabel.text = traitCollection.verticalSizeClass == .compact ? "Score:\n\(newScore)" : "Score: \(newScore)"
+  }
+  
+  func registerMatch(firstIndex: Int, secondIndex: Int) {
+    removeCard(firstIndex)
+    removeCard(secondIndex)
+  }
+  
+  func registerMismatch(firstIndex: Int, secondIndex: Int) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + cardFlipDelayInSeconds) {
+      [weak self] in
+      guard let self = self else { return }
+      self.flipFaceDown(firstIndex)
+      self.flipFaceDown(secondIndex)
+    }
+  }
+}
+
+// MARK: - Theme Chooser Delegate
+
+extension ConcentrationGameViewController: ThemeChooserViewControllerDelegate {
+  func chooseTheme(_ newTheme: Themes.Theme) {
+    loadNewTheme(newTheme)
   }
 }
